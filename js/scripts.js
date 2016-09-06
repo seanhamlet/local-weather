@@ -11,7 +11,7 @@ $(document).ready(function() {
 
   function updateWeather(pos) {
     // Get location based on ip address
-    $.getJSON('http://ipinfo.io', function(loc) {
+    $.getJSON('https://ipinfo.io', function(loc) {
       $('#location').html('<span class="fa fa-map-marker"></span>  ' + loc.city + ', ' + loc.country);
     });
     
