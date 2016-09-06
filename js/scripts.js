@@ -12,7 +12,7 @@ $(document).ready(function() {
   function updateWeather(pos) {
     // Get location based on ip address
 
-    var posUrl = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + 
+    var posUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + 
                  pos.coords.latitude + ',' + 
                  pos.coords.longitude + 
                  '&sensor=true';
