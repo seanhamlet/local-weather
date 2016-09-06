@@ -22,3 +22,5 @@ Toos Used:
 - jQuery
 - forcast.io API
 - Google Maps API
+
+![Local Weather Screenshot](/images/local-weather.png "Local Weather")
