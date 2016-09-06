@@ -21,4 +21,4 @@ Toos Used:
 - JavaScript
 - jQuery
 - forcast.io API
-- ipinfo.io API
+- Google Maps API
