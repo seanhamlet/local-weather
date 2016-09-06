@@ -11,9 +11,14 @@ $(document).ready(function() {
 
   function updateWeather(pos) {
     // Get location based on ip address
-    $.getJSON('http://ipinfo.io', function(loc) {
-      console.log(loc);
-      $('#location').html('<span class="fa fa-map-marker"></span>  ' + loc.city + ', ' + loc.country);
+
+    var posUrl = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + 
+                 pos.coords.latitude + ',' + 
+                 pos.coords.longitude + 
+                 '&sensor=true';
+
+    $.getJSON(posUrl, function(loc) {
+      $('#location').html('<span class="fa fa-map-marker"></span>  ' + loc.results[5].formatted_address);
     });
     
     var apiKey = '6719582b1417b3c6abec1977c054d1a8';
