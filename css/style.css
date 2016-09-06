@@ -11,27 +11,27 @@ body {
 
 /* Background Images */
 body.clearday {
-  background: url('https://images.unsplash.com/photo-1452857656212-edfb289abfbc?crop=entropy&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1300') fixed center bottom no-repeat;
+  background: url('../images/clearday.jpeg') fixed center bottom no-repeat;
   background-size: 100% 100%;
 }
 
 body.clearnight {
-  background: url('https://images.unsplash.com/photo-1456947700819-d91abdf38117?crop=entropy&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1300') fixed center bottom no-repeat;
+  background: url('../images/clearnight.jpeg') fixed center bottom no-repeat;
   background-size: 100% 100%;
 }
 
 body.rainy {
-  background: url('https://images.unsplash.com/photo-1433863448220-78aaa064ff47?crop=entropy&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1300') fixed center bottom no-repeat;
+  background: url('../images/rainy.jpeg') fixed center bottom no-repeat;
   background-size: 100% 100%;
 }
 
 body.cloudyday {
-  background: url('https://images.unsplash.com/photo-1432071375803-08a3f5fd224f?crop=entropy&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1300') fixed center bottom no-repeat;
+  background: url('../images/cloudyday.jpeg') fixed center bottom no-repeat;
   background-size: 100% 100%;
 }
 
 body.cloudynight {
-  background: url('https://images.unsplash.com/photo-1417919452205-b9962ef65386?crop=entropy&fit=crop&fm=jpg&h=750&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1300') fixed center bottom no-repeat;
+  background: url('../images/cloudynight.jpeg') fixed center bottom no-repeat;
   background-size: 100% 100%;
 }
 
