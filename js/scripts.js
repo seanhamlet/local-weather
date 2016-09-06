@@ -107,12 +107,8 @@ $(document).ready(function() {
         for (i = 0; i < 7; i++) {
           if ((today + i + 1) <= 6) {
             weekdays[i] = weekday[today + i + 1];
-            console.log(today + i + 1);
-            console.log(weekdays[i]);
           } else {
             weekdays[i] = weekday[today + i + 1 - 7];
-            console.log(today + i + 1 - 7);
-            console.log(weekdays[i]);
           }
         }
 
