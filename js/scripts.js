@@ -1,4 +1,5 @@
-$(document).ready(function() {
+// execute when the DOM is fully loaded
+$(function() {
 
   // Get geolocation
   if (navigator.geolocation) {
@@ -12,21 +13,21 @@ $(document).ready(function() {
   function updateWeather(pos) {
     // Get location based on ip address
 
-    var posUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + 
-                 pos.coords.latitude + ',' + 
-                 pos.coords.longitude + 
+    var posUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                 pos.coords.latitude + ',' +
+                 pos.coords.longitude +
                  '&sensor=true';
 
     $.getJSON(posUrl, function(loc) {
       $('#location').html('<span class="fa fa-map-marker"></span>  ' + loc.results[5].formatted_address);
     });
-    
+
     var apiKey = '6719582b1417b3c6abec1977c054d1a8';
-    
+
     var url = 'https://api.forecast.io/forecast/' + apiKey + '/' +
               pos.coords.latitude + ',' +
               pos.coords.longitude;
-    
+
     $.ajax({
       url:  url,
       dataType: 'jsonp',
@@ -41,13 +42,13 @@ $(document).ready(function() {
 
         var tempFmax = Math.round(data.daily.data[0].temperatureMax);
         var tempCmax = Math.round((tempFmax - 32)*(5/9));
-        
+
         // Set current data
         $('#temp').html(tempF + '<sup>&deg;<span class="temp-unit">F</span></sup>');
         $('#temp-max').html(tempFmax);
         $('#temp-min').html(tempFmin);
         $('#condition').html(data.currently.summary);
-        
+
         // Determine current icon and background
         updates = weatherIcon(data.currently.icon);
 
@@ -80,7 +81,7 @@ $(document).ready(function() {
 
           updates6day[i] = weatherIcon(icon6day[i]);
         }
-        
+
         // Update 6 day forecast icons
         k = 1;
         for (i = 0; i < updates6day.length; i++) {
@@ -115,7 +116,7 @@ $(document).ready(function() {
         for (i = 0; i < 6; i++) {
           $('#day' + (i+1).toString()).html(weekdays[i]);
         }
-        
+
         // Button to change temperature units (C or F)
         $('.temp-unit').click(function () {
           if ($('.temp-unit').html() === 'F') {
@@ -148,19 +149,19 @@ $(document).ready(function() {
           switch(icon) {
             case 'clear-day':
               return {
-                      icon: 'wi-day-sunny', 
+                      icon: 'wi-day-sunny',
                       background: 'clearday'
               };
               break;
             case 'clear-night':
               return {
-                      icon: 'wi-night-clear', 
+                      icon: 'wi-night-clear',
                       background: 'clearnight'
               };
               break;
             case 'rain':
               return {
-                      icon: 'wi-rain', 
+                      icon: 'wi-rain',
                       background: 'rainy'
               };
               break;
@@ -211,7 +212,7 @@ $(document).ready(function() {
 
         }
 
-        function updateBackground(background) { 
+        function updateBackground(background) {
           $('body').addClass(background);
         }
 
@@ -224,11 +225,11 @@ $(document).ready(function() {
           $('#day' + dayNum + '-icon').addClass(icon);
         }
       }, // end success function
-      
+
       error: {
-        
+
       }
-      
+
     });
 
   } // end updateWeather function
