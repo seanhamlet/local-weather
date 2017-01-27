@@ -24,7 +24,7 @@ $(function() {
 
     var apiKey = '6719582b1417b3c6abec1977c054d1a8';
 
-    var url = 'https://api.forecast.io/forecast/' + apiKey + '/' +
+    var url = 'https://api.darksky.net/forecast/' + apiKey + '/' +
               pos.coords.latitude + ',' +
               pos.coords.longitude;
 
