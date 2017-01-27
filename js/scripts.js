@@ -19,7 +19,7 @@ $(function() {
                  '&sensor=true';
 
     $.getJSON(posUrl, function(loc) {
-      $('#location').html('<span class="fa fa-map-marker"></span>  ' + loc.results[5].formatted_address);
+      $('#location').html('<span class="fa fa-map-marker"></span>  ' + loc.results[2].formatted_address);
     });
 
     var apiKey = '6719582b1417b3c6abec1977c054d1a8';
