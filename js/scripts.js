@@ -26,6 +26,9 @@ function updateLocation(position) {
     });
 }
 
+/**
+ * Updates weather and forecast
+ */
 function updateWeather(position) {
     var apiKey = '465cab54ef44142a5931314ebe072540';
 
