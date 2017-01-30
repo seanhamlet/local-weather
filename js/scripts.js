@@ -40,6 +40,8 @@ function updateWeather(position) {
     $.getJSON(parameters)
     .done(function(data) {
 
+        // Update current weather
+
         // Get current weather data
         var tempF = Math.round(data.currently.temperature);
         var tempC = Math.round((tempF - 32)*(5/9));
@@ -57,12 +59,13 @@ function updateWeather(position) {
         $('#condition').html(data.currently.summary);
 
         // Determine current icon and background
-        updates = weatherIcon(data.currently.icon);
+        current = weatherIcon(data.currently.icon);
 
         // Update current icon and background
-        updateBackground(updates.background);
-        updateIcon(updates.icon);
+        updateBackground(current.background);
+        updateIcon('#icon', current.icon);
 
+        // Update 6 day forecast
         // Get next 6 day data
         var tempFmin6day = [],
             tempCmin6day = [],
@@ -92,7 +95,8 @@ function updateWeather(position) {
         // Update 6 day forecast icons
         k = 1;
         for (i = 0; i < updates6day.length; i++) {
-            update6dayIcon(k,updates6day[i].icon);
+            var selector = '#day' + k + '-icon';
+            updateIcon(selector, updates6day[i].icon);
             k++;
         }
 
@@ -223,13 +227,8 @@ function updateWeather(position) {
             $('body').addClass(background);
         }
 
-        // make this function more general where you pass no only the icon to be used, but also the selector to use it on e.g. #icon, day5-icon
-        function updateIcon(icon) {
-            $('#icon').addClass(icon);
-        }
-
-        function update6dayIcon(dayNum,icon) {
-            $('#day' + dayNum + '-icon').addClass(icon);
+        function updateIcon(selector, icon) {
+            $(selector).addClass(icon);
         }
     }) // end success function
 
