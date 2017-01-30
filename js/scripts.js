@@ -3,27 +3,17 @@ var weather;
 // execute when the DOM is fully loaded
 $(function() {
 
-    // Get geolocation
-    // TODO Update to use googleapis.com/geolocaion/...
-    // since you can't use geolocation on http anymore
-
+    // Get location
     $.getJSON('http://ip-api.com/json')
     .done(function(data) {
         // set location
         $('#location').html(data.city + ', ' + data.region);
+        // set weather
+        updateWeather(data);
     })
     .fail(function(response){
         console.log('failed location');
     })
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            // updateLocation(position);
-            updateWeather(position);
-        });
-    } else {
-        alert("Can't find location!")
-    }
 }); // end document ready function
 
 /**
@@ -33,8 +23,8 @@ function updateWeather(position) {
     var apiKey = '465cab54ef44142a5931314ebe072540';
 
     var url = 'https://api.darksky.net/forecast/' + apiKey + '/' +
-              position.coords.latitude + ',' +
-              position.coords.longitude;
+              position.lat + ',' +
+              position.lon;
 
     var parameters = {
         url: url,
