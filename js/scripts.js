@@ -34,29 +34,7 @@ function updateWeather(position) {
     .done(function(data) {
 
         // Update current weather
-
-        // Get current weather data
-        var tempF = Math.round(data.currently.temperature);
-        var tempC = Math.round((tempF - 32)*(5/9));
-
-        var tempFmin = Math.round(data.daily.data[0].temperatureMin);
-        var tempCmin = Math.round((tempFmin - 32)*(5/9));
-
-        var tempFmax = Math.round(data.daily.data[0].temperatureMax);
-        var tempCmax = Math.round((tempFmax - 32)*(5/9));
-
-        // Set current data
-        $('#temp').html(tempF + '<sup>&deg;<span class="temp-unit">F</span></sup>');
-        $('#temp-max').html(tempFmax);
-        $('#temp-min').html(tempFmin);
-        $('#condition').html(data.currently.summary);
-
-        // Determine current icon and background
-        current = weatherIcon(data.currently.icon);
-
-        // Update current icon and background
-        updateBackground(current.background);
-        updateIcon('#icon', current.icon);
+        updateCurrent(data);
 
         // Update 6 day forecast
         // Get next 6 day data
@@ -125,9 +103,9 @@ function updateWeather(position) {
         $('.temp-unit').click(function () {
             if ($('.temp-unit').html() === 'F') {
                 $('.temp-unit').html('C');
-                $('#temp').html(tempF + '<sup>&deg;<span class="temp-unit">F</span></sup>');
-                $('#temp-max').html(tempFmax);
-                $('#temp-min').html(tempFmin);
+                $('#temp').html(weather.current.tempF + '<sup>&deg;<span class="temp-unit">F</span></sup>');
+                $('#temp-max').html(weather.current.tempFmax);
+                $('#temp-min').html(weather.current.tempFmin);
 
                 for (i = 0; i < 6; i++) {
                     $('#temp-max' + (i+1).toString()).html(tempFmax6day[i]);
@@ -136,9 +114,9 @@ function updateWeather(position) {
 
             } else if ($('.temp-unit').html() === 'C') {
                 $('.temp-unit').html('F');
-                $('#temp').html(tempC + '<sup>&deg;<span class="temp-unit">C</span></sup>');
-                $('#temp-max').html(tempCmax);
-                $('#temp-min').html(tempCmin);
+                $('#temp').html(weather.current.tempC + '<sup>&deg;<span class="temp-unit">C</span></sup>');
+                $('#temp-max').html(weather.current.tempCmax);
+                $('#temp-min').html(weather.current.tempCmin);
 
                 for (i = 0; i < 6; i++) {
                     $('#temp-max' + (i+1).toString()).html(tempCmax6day[i]);
@@ -146,83 +124,6 @@ function updateWeather(position) {
                 }
             }
         });
-
-        // Returns weather icon and background tag with passed condition
-        function weatherIcon(icon) {
-
-            switch(icon) {
-                case 'clear-day':
-                    return {
-                        icon: 'wi-day-sunny',
-                        background: 'clearday'
-                    };
-                    break;
-                case 'clear-night':
-                    return {
-                        icon: 'wi-night-clear',
-                        background: 'clearnight'
-                    };
-                    break;
-                case 'rain':
-                    return {
-                        icon: 'wi-rain',
-                        background: 'rainy'
-                    };
-                    break;
-                case 'snow':
-                    return {
-                        icon: 'wi-snow'
-                    };
-                    break;
-                case 'sleet':
-                    return {
-                        icon: 'wi-sleet'
-                    };
-                    break;
-                case 'wind':
-                    return {
-                        icon: 'wi-windy'
-                    };
-                    break;
-                case 'fog':
-                    return {
-                          icon: 'wi-fog'
-                    };
-                    break;
-                case 'cloudy':
-                    return {
-                        icon: 'wi-cloudy',
-                        background: 'cloudyday'
-                    };
-                    break;
-                case 'partly-cloudy-day':
-                    return {
-                        icon: 'wi-day-cloudy',
-                        background: 'cloudyday'
-                    };
-                    break;
-                case 'partly-cloudy-night':
-                    return {
-                        icon: 'wi-night-alt-cloudy',
-                        background: 'cloudynight'
-                    };
-                    break;
-                default:
-                    $('#icon').addClass('wi-refresh');
-                    return {
-                        icon: 'wi-refresh'
-                    };
-            };
-
-        }
-
-        function updateBackground(background) {
-            $('body').addClass(background);
-        }
-
-        function updateIcon(selector, icon) {
-            $(selector).addClass(icon);
-        }
     }) // end success function
 
     .fail(function() {
@@ -230,3 +131,122 @@ function updateWeather(position) {
     });
 
 } // end updateWeather function
+
+/**
+ * Updates current weather
+ */
+function updateCurrent(data) {
+    // Get current weather data
+    weather = {
+        current: {
+            tempF: Math.round(data.currently.temperature),
+            tempFmin: Math.round(data.daily.data[0].temperatureMin),
+            tempFmax: Math.round(data.daily.data[0].temperatureMax)
+        }
+    };
+
+    // Set current data
+    $('#temp').html(weather.current.tempF + '<sup>&deg;<span class="temp-unit">F</span></sup>');
+    $('#temp-max').html(weather.current.tempFmax);
+    $('#temp-min').html(weather.current.tempFmin);
+    $('#condition').html(data.currently.summary);
+
+    // Determine current icon and background
+    var current = weatherIcon(data.currently.icon);
+
+    // Update current icon and background
+    updateBackground(current.background);
+    updateIcon('#icon', current.icon);
+}
+
+/**
+ * Converts Farenheit to Celsius
+ */
+function convertToCelsius(tempFarenheit) {
+    return Math.round( (tempFarenheit - 32) * (5/9) );
+}
+
+/**
+ * Updates background image
+ */
+function updateBackground(background) {
+    $('body').addClass(background);
+}
+
+/**
+ * Updates weather icon
+ */
+function updateIcon(selector, icon) {
+    $(selector).addClass(icon);
+}
+
+/**
+ * Returns icon based on weather condition
+ */
+function weatherIcon(icon) {
+
+    switch(icon) {
+        case 'clear-day':
+            return {
+                icon: 'wi-day-sunny',
+                background: 'clearday'
+            };
+            break;
+        case 'clear-night':
+            return {
+                icon: 'wi-night-clear',
+                background: 'clearnight'
+            };
+            break;
+        case 'rain':
+            return {
+                icon: 'wi-rain',
+                background: 'rainy'
+            };
+            break;
+        case 'snow':
+            return {
+                icon: 'wi-snow'
+            };
+            break;
+        case 'sleet':
+            return {
+                icon: 'wi-sleet'
+            };
+            break;
+        case 'wind':
+            return {
+                icon: 'wi-windy'
+            };
+            break;
+        case 'fog':
+            return {
+                  icon: 'wi-fog'
+            };
+            break;
+        case 'cloudy':
+            return {
+                icon: 'wi-cloudy',
+                background: 'cloudyday'
+            };
+            break;
+        case 'partly-cloudy-day':
+            return {
+                icon: 'wi-day-cloudy',
+                background: 'cloudyday'
+            };
+            break;
+        case 'partly-cloudy-night':
+            return {
+                icon: 'wi-night-alt-cloudy',
+                background: 'cloudynight'
+            };
+            break;
+        default:
+            $('#icon').addClass('wi-refresh');
+            return {
+                icon: 'wi-refresh'
+            };
+    };
+
+}
