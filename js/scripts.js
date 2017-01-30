@@ -1,30 +1,30 @@
+var weather;
+
 // execute when the DOM is fully loaded
 $(function() {
 
     // Get geolocation
+    // TODO Update to use googleapis.com/geolocaion/...
+    // since you can't use geolocation on http anymore
+
+    $.getJSON('http://ip-api.com/json')
+    .done(function(data) {
+        // set location
+        $('#location').html(data.city + ', ' + data.region);
+    })
+    .fail(function(response){
+        console.log('failed location');
+    })
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-            updateLocation(position);
+            // updateLocation(position);
             updateWeather(position);
         });
     } else {
         alert("Can't find location!")
     }
 }); // end document ready function
-
-/**
- * Updates address of location
- */
-function updateLocation(position) {
-    var posUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-                 position.coords.latitude + ',' +
-                 position.coords.longitude +
-                 '&sensor=true';
-
-    $.getJSON(posUrl, function(loc) {
-        $('#location').html(loc.results[4].formatted_address);
-    });
-}
 
 /**
  * Updates weather and forecast
