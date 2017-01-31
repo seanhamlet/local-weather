@@ -60,7 +60,6 @@ function updateWeather(position) {
         $('#icons').html(icons.join(' '));
 
         // Set weekdays for 6 day forecast
-        var d = new Date();
         var weekday = [];
         weekday[0]=  "SU";
         weekday[1] = "MO";
@@ -70,22 +69,12 @@ function updateWeather(position) {
         weekday[5] = "FR";
         weekday[6] = "SA";
 
-        var today = d.getDay();
-
-        weekdays = [];
+        var today = new Date().getDay();
 
         // Update days of week;
-        for (i = 0; i < 7; i++) {
-            if ((today + i + 1) <= 6) {
-                weekdays[i] = weekday[today + i + 1];
-            } else {
-                weekdays[i] = weekday[today + i + 1 - 7];
-            }
-        }
-
         var days = '';
         for (i = 0; i < 6; i++) {
-            days += weekdays[i] + ' ';
+            days += weekday[(today + i + 1) % 7] + ' ';
         }
 
         $('#days').html(days);
