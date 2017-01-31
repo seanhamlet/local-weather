@@ -8,7 +8,7 @@ $(function() {
     .done(function(data) {
         // set location
         $('#location').html(data.city + ', ' + data.region);
-        // set weather
+        // update weather
         updateWeather(data);
     })
     .fail(function(response){
@@ -37,47 +37,7 @@ function updateWeather(position) {
         updateCurrent(data);
 
         // Update 6 day forecast
-        // Get next 6 day data
-        var temps = [],
-            icons = [];
-
-        weather.forecast = {
-            tempMaxF: [],
-            tempMinF: []
-        }
-        for (var i = 0; i < 6; i++) {
-            weather.forecast.tempMaxF.push(Math.round(data.daily.data[i+1].temperatureMax));
-            weather.forecast.tempMinF.push(Math.round(data.daily.data[i+1].temperatureMin));
-
-            temps[i] = weather.forecast.tempMaxF[i].toString() + '/' +
-                       weather.forecast.tempMinF[i].toString() + ' &deg;F';
-
-            icons[i] = getIcon(data.daily.data[i+1].icon);
-        }
-
-        // Set next 6 day data
-        $('#temps').html(temps.join(' '));
-        $('#icons').html(icons.join(' '));
-
-        // Set weekdays for 6 day forecast
-        var weekday = [];
-        weekday[0]=  "SU";
-        weekday[1] = "MO";
-        weekday[2] = "TU";
-        weekday[3] = "WE";
-        weekday[4] = "TH";
-        weekday[5] = "FR";
-        weekday[6] = "SA";
-
-        var today = new Date().getDay();
-
-        // Update days of week;
-        var days = '';
-        for (i = 0; i < 6; i++) {
-            days += weekday[(today + i + 1) % 7] + ' ';
-        }
-
-        $('#days').html(days);
+        updateForecast(data);
 
         // Button to change temperature units (C or F)
         $('.temp-unit').click(function () {
@@ -128,6 +88,51 @@ function updateCurrent(data) {
     $('#temp').html(weather.current.tempF + ' &deg;F');
     $('#icon').html(getIcon(data.currently.icon));
     $('body').addClass(getBackground(data.currently.icon));
+}
+
+function updateForecast(data) {
+    // Get next 6 day data
+    var temps = [],
+        icons = [];
+
+    weather.forecast = {
+        tempMaxF: [],
+        tempMinF: []
+    }
+    for (var i = 0; i < 6; i++) {
+        weather.forecast.tempMaxF.push(Math.round(data.daily.data[i+1].temperatureMax));
+        weather.forecast.tempMinF.push(Math.round(data.daily.data[i+1].temperatureMin));
+
+        temps[i] = weather.forecast.tempMaxF[i].toString() + '/' +
+                   weather.forecast.tempMinF[i].toString() + ' &deg;F';
+
+        icons[i] = getIcon(data.daily.data[i+1].icon);
+    }
+
+    // Set next 6 day data
+    $('#temps').html(temps.join(' '));
+    $('#icons').html(icons.join(' '));
+
+    // Set weekdays for 6 day forecast
+    var weekday = [];
+    weekday[0]=  "SU";
+    weekday[1] = "MO";
+    weekday[2] = "TU";
+    weekday[3] = "WE";
+    weekday[4] = "TH";
+    weekday[5] = "FR";
+    weekday[6] = "SA";
+
+    var today = new Date().getDay();
+
+    // Update days of week;
+    var days = '';
+    for (i = 0; i < 6; i++) {
+        days += weekday[(today + i + 1) % 7] + ' ';
+    }
+
+    $('#days').html(days);
+
 }
 
 /**
