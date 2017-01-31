@@ -38,49 +38,37 @@ function updateWeather(position) {
 
         // Update 6 day forecast
         // Get next 6 day data
-        var tempFmin6day = [],
-            tempCmin6day = [],
-            tempFmax6day = [],
-            tempCmax6day = [],
-            icon6day = [],
-            updates6day = [];
+        var temps = [],
+            icons = [];
 
+        weather.forecast = {
+            tempMaxF: [],
+            tempMinF: []
+        }
         for (var i = 0; i < 6; i++) {
-            tempFmin6day[i] = Math.round(data.daily.data[i+1].temperatureMin);
-            tempCmin6day[i] = Math.round((tempFmin6day[i] - 32)*(5/9));
+            weather.forecast.tempMaxF.push(Math.round(data.daily.data[i+1].temperatureMax));
+            weather.forecast.tempMinF.push(Math.round(data.daily.data[i+1].temperatureMin));
 
-            tempFmax6day[i] = Math.round(data.daily.data[i+1].temperatureMax);
-            tempCmax6day[i] = Math.round((tempFmax6day[i] - 32)*(5/9));
+            temps[i] = weather.forecast.tempMaxF[i].toString() + '/' +
+                       weather.forecast.tempMinF[i].toString() + ' &deg;F';
 
-            icon6day[i] = data.daily.data[i+1].icon;
+            icons[i] = getIcon(data.daily.data[i+1].icon);
         }
 
         // Set next 6 day data
-        for (i = 0; i < 6; i++) {
-            $('#temp-max' + (i+1).toString()).html(tempFmax6day[i]);
-            $('#temp-min' + (i+1).toString()).html(tempFmin6day[i]);
-
-            updates6day[i] = weatherIcon(icon6day[i]);
-        }
-
-        // Update 6 day forecast icons
-        k = 1;
-        for (i = 0; i < updates6day.length; i++) {
-            var selector = '#day' + k + '-icon';
-            updateIcon(selector, updates6day[i].icon);
-            k++;
-        }
+        $('#temps').html(temps.join(' '));
+        $('#icons').html(icons.join(' '));
 
         // Set weekdays for 6 day forecast
         var d = new Date();
         var weekday = [];
-        weekday[0]=  "Sunday";
-        weekday[1] = "Monday";
-        weekday[2] = "Tuesday";
-        weekday[3] = "Wednesday";
-        weekday[4] = "Thursday";
-        weekday[5] = "Friday";
-        weekday[6] = "Saturday";
+        weekday[0]=  "SU";
+        weekday[1] = "MO";
+        weekday[2] = "TU";
+        weekday[3] = "WE";
+        weekday[4] = "TH";
+        weekday[5] = "FR";
+        weekday[6] = "SA";
 
         var today = d.getDay();
 
@@ -95,33 +83,35 @@ function updateWeather(position) {
             }
         }
 
+        var days = '';
         for (i = 0; i < 6; i++) {
-            $('#day' + (i+1).toString()).html(weekdays[i]);
+            days += weekdays[i] + ' ';
         }
+
+        $('#days').html(days);
 
         // Button to change temperature units (C or F)
         $('.temp-unit').click(function () {
             if ($('.temp-unit').html() === 'F') {
                 $('.temp-unit').html('C');
-                $('#temp').html(weather.current.tempF + '<sup>&deg;<span class="temp-unit">F</span></sup>');
-                $('#temp-max').html(weather.current.tempFmax);
-                $('#temp-min').html(weather.current.tempFmin);
+                $('#temp').html(weather.current.tempF + ' &deg;F');
 
                 for (i = 0; i < 6; i++) {
-                    $('#temp-max' + (i+1).toString()).html(tempFmax6day[i]);
-                    $('#temp-min' + (i+1).toString()).html(tempFmin6day[i]);
+                    temps[i] = weather.forecast.tempMaxF[i].toString() + '/' +
+                               weather.forecast.tempMinF[i].toString() + ' &deg;F';
                 }
+
+                $('#temps').html(temps.join(' '));
 
             } else if ($('.temp-unit').html() === 'C') {
                 $('.temp-unit').html('F');
-                $('#temp').html(weather.current.tempC + '<sup>&deg;<span class="temp-unit">C</span></sup>');
-                $('#temp-max').html(weather.current.tempCmax);
-                $('#temp-min').html(weather.current.tempCmin);
+                $('#temp').html(convertToCelsius(weather.current.tempF) + ' &deg;C');
 
                 for (i = 0; i < 6; i++) {
-                    $('#temp-max' + (i+1).toString()).html(tempCmax6day[i]);
-                    $('#temp-min' + (i+1).toString()).html(tempCmin6day[i]);
+                    temps[i] = convertToCelsius(weather.forecast.tempMaxF[i]).toString() + '/' +
+                               convertToCelsius(weather.forecast.tempMinF[i]).toString() + ' &deg;C';
                 }
+                $('#temps').html(temps.join(' '));
             }
         });
     }) // end success function
@@ -145,18 +135,10 @@ function updateCurrent(data) {
         }
     };
 
-    // Set current data
-    $('#temp').html(weather.current.tempF + '<sup>&deg;<span class="temp-unit">F</span></sup>');
-    $('#temp-max').html(weather.current.tempFmax);
-    $('#temp-min').html(weather.current.tempFmin);
-    $('#condition').html(data.currently.summary);
-
-    // Determine current icon and background
-    var current = weatherIcon(data.currently.icon);
-
-    // Update current icon and background
-    updateBackground(current.background);
-    updateIcon('#icon', current.icon);
+    // set current data
+    $('#temp').html(weather.current.tempF + ' &deg;F');
+    $('#icon').html(getIcon(data.currently.icon));
+    $('body').addClass(getBackground(data.currently.icon));
 }
 
 /**
@@ -167,86 +149,73 @@ function convertToCelsius(tempFarenheit) {
 }
 
 /**
- * Updates background image
- */
-function updateBackground(background) {
-    $('body').addClass(background);
-}
-
-/**
- * Updates weather icon
- */
-function updateIcon(selector, icon) {
-    $(selector).addClass(icon);
-}
-
-/**
  * Returns icon based on weather condition
  */
-function weatherIcon(icon) {
+function getIcon(condition) {
 
-    switch(icon) {
+    switch(condition) {
         case 'clear-day':
-            return {
-                icon: 'wi-day-sunny',
-                background: 'clearday'
-            };
+            return '<i class="wi wi-day-sunny"></i>';
             break;
         case 'clear-night':
-            return {
-                icon: 'wi-night-clear',
-                background: 'clearnight'
-            };
+            return '<i class="wi wi-night-clear"></i>';
             break;
         case 'rain':
-            return {
-                icon: 'wi-rain',
-                background: 'rainy'
-            };
+            return '<i class="wi wi-rain"></i>';
             break;
         case 'snow':
-            return {
-                icon: 'wi-snow'
-            };
+            return '<i class="wi wi-snow"></i>';
             break;
         case 'sleet':
-            return {
-                icon: 'wi-sleet'
-            };
+            return '<i class="wi wi-sleet"></i>';
             break;
         case 'wind':
-            return {
-                icon: 'wi-windy'
-            };
+            return '<i class="wi wi-windy"></i>';
             break;
         case 'fog':
-            return {
-                  icon: 'wi-fog'
-            };
+            return '<i class="wi wi-fog"></i>';
             break;
         case 'cloudy':
-            return {
-                icon: 'wi-cloudy',
-                background: 'cloudyday'
-            };
+            return '<i class="wi wi-cloudy"></i>';
             break;
         case 'partly-cloudy-day':
-            return {
-                icon: 'wi-day-cloudy',
-                background: 'cloudyday'
-            };
+            return '<i class="wi wi-day-cloudy"></i>';
             break;
         case 'partly-cloudy-night':
-            return {
-                icon: 'wi-night-alt-cloudy',
-                background: 'cloudynight'
-            };
+            return '<i class="wi wi-night-alt-cloudy"></i>';
             break;
         default:
-            $('#icon').addClass('wi-refresh');
-            return {
-                icon: 'wi-refresh'
-            };
+            return 'wi-refresh';
+    };
+
+}
+
+/**
+ * Returns background class based on weather condition
+ */
+function getBackground(condition) {
+
+    switch(condition) {
+        case 'clear-day':
+            return 'clearday';
+            break;
+        case 'clear-night':
+            return 'clearnight';
+            break;
+        case 'rain':
+            return 'rainy';
+            break;
+        case 'cloudy':
+            return 'cloudyday';
+            break;
+        case 'partly-cloudy-day':
+            return 'cloudyday';
+            break;
+        case 'partly-cloudy-night':
+            return 'cloudynight';
+            break;
+        default:
+            return '';
     };
 
 }
