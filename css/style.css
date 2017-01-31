@@ -65,23 +65,11 @@ body.cloudynight {
     font-size: 10rem;
 }
 
-#days {
+#days, #temps, #icons {
     font-size: 2rem;
+    margin-right: 1rem;
     color: rgba(255,255,255,0.6);
-}
-
-#temps {
-    font-size: 2rem;
-    margin-right: -1rem;
-    padding-right: 0.5rem;
-    padding-left: 0;
-    color: rgba(255,255,255,0.6);
-    text-align: right;
-}
-
-#icons {
-    font-size: 2rem;
-    color: rgba(255,255,255,0.6);
+    float: right;
 }
 
 footer {

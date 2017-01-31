@@ -50,7 +50,7 @@ function updateWeather(position) {
                                weather.forecast.tempMinF[i].toString() + ' &deg;F';
                 }
 
-                $('#temps').html(temps.join(' '));
+                $('#temps').html(temps.join('<br>'));
 
             } else if ($('.temp-unit').html() === 'C') {
                 $('.temp-unit').html('F');
@@ -60,7 +60,7 @@ function updateWeather(position) {
                     temps[i] = convertToCelsius(weather.forecast.tempMaxF[i]).toString() + '/' +
                                convertToCelsius(weather.forecast.tempMinF[i]).toString() + ' &deg;C';
                 }
-                $('#temps').html(temps.join(' '));
+                $('#temps').html(temps.join('<br>'));
             }
         });
     }) // end success function
@@ -110,8 +110,8 @@ function updateForecast(data) {
     }
 
     // Set next 6 day data
-    $('#temps').html(temps.join(' '));
-    $('#icons').html(icons.join(' '));
+    $('#temps').html(temps.join('<br>'));
+    $('#icons').html(icons.join('<br>'));
 
     // Set weekdays for 6 day forecast
     var weekday = [];
@@ -128,7 +128,7 @@ function updateForecast(data) {
     // Update days of week;
     var days = '';
     for (i = 0; i < 6; i++) {
-        days += weekday[(today + i + 1) % 7] + ' ';
+        days += weekday[(today + i + 1) % 7] + '<br>';
     }
 
     $('#days').html(days);
