@@ -16,7 +16,7 @@ $(function() {
     })
 
     // bind changeUnits to click event
-    $('.temp-unit').click(changeUnits);
+    $('#temp-unit').click(changeUnits);
 
 }); // end document ready function
 
@@ -120,16 +120,16 @@ function updateForecast(data) {
  */
 function changeUnits() {
     var temps = [];
-    if ($('.temp-unit').html() === 'F') {
-        $('.temp-unit').html('C');
+    if ($('#temp-unit').html() === 'Switch to F') {
+        $('#temp-unit').html('Switch to C');
         $('#temp').html(weather.current.tempF + ' &deg;F');
 
         for (i = 0; i < 6; i++) {
             temps[i] = weather.forecast.tempMaxF[i].toString() + '/' +
                        weather.forecast.tempMinF[i].toString() + ' &deg;F';
         }
-    } else if ($('.temp-unit').html() === 'C') {
-        $('.temp-unit').html('F');
+    } else if ($('#temp-unit').html() === 'Switch to C') {
+        $('#temp-unit').html('Switch to F');
         $('#temp').html(convertToCelsius(weather.current.tempF) + ' &deg;C');
 
         for (i = 0; i < 6; i++) {

@@ -38,6 +38,7 @@ body.cloudynight {
 #location {
     font-size: 4em;
     text-align: left;
+    margin-bottom: 2rem;
 }
 
 #temp {
@@ -57,8 +58,23 @@ body.cloudynight {
     margin: 1.5rem;
 }
 
-.temp-unit {
-    text-align: right;
+#temp-unit {
+    border: 1px solid white;
+    border-radius: 1rem;
+    padding: 0.5rem;
+    font-size: 2rem;
+    margin-top: 3rem;
+    margin-left: 6.2rem;
+    text-align:center;
+}
+#temp-unit:hover {
+    background-color: rgba(255,255,255,0.3);
+    color: rgba(0,0,0,0.9);
+    cursor:pointer;
+}
+#temp-unit:active{
+    background-color: inherit;
+    color:inherit;
 }
 
 #icon {
