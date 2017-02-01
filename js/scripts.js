@@ -14,6 +14,10 @@ $(function() {
     .fail(function(response){
         console.log('failed location');
     })
+
+    // bind changeUnits to click event
+    $('.temp-unit').click(changeUnits);
+
 }); // end document ready function
 
 /**
@@ -39,30 +43,6 @@ function updateWeather(position) {
         // Update 6 day forecast
         updateForecast(data);
 
-        // Button to change temperature units (C or F)
-        $('.temp-unit').click(function () {
-            if ($('.temp-unit').html() === 'F') {
-                $('.temp-unit').html('C');
-                $('#temp').html(weather.current.tempF + ' &deg;F');
-
-                for (i = 0; i < 6; i++) {
-                    temps[i] = weather.forecast.tempMaxF[i].toString() + '/' +
-                               weather.forecast.tempMinF[i].toString() + ' &deg;F';
-                }
-
-                $('#temps').html(temps.join('<br>'));
-
-            } else if ($('.temp-unit').html() === 'C') {
-                $('.temp-unit').html('F');
-                $('#temp').html(convertToCelsius(weather.current.tempF) + ' &deg;C');
-
-                for (i = 0; i < 6; i++) {
-                    temps[i] = convertToCelsius(weather.forecast.tempMaxF[i]).toString() + '/' +
-                               convertToCelsius(weather.forecast.tempMinF[i]).toString() + ' &deg;C';
-                }
-                $('#temps').html(temps.join('<br>'));
-            }
-        });
     }) // end success function
 
     .fail(function() {
@@ -133,6 +113,32 @@ function updateForecast(data) {
 
     $('#days').html(days);
 
+}
+
+/**
+ * Changes units between F and C
+ */
+function changeUnits() {
+    var temps = [];
+    if ($('.temp-unit').html() === 'F') {
+        $('.temp-unit').html('C');
+        $('#temp').html(weather.current.tempF + ' &deg;F');
+
+        for (i = 0; i < 6; i++) {
+            temps[i] = weather.forecast.tempMaxF[i].toString() + '/' +
+                       weather.forecast.tempMinF[i].toString() + ' &deg;F';
+        }
+    } else if ($('.temp-unit').html() === 'C') {
+        $('.temp-unit').html('F');
+        $('#temp').html(convertToCelsius(weather.current.tempF) + ' &deg;C');
+
+        for (i = 0; i < 6; i++) {
+            temps[i] = convertToCelsius(weather.forecast.tempMaxF[i]).toString() + '/' +
+                       convertToCelsius(weather.forecast.tempMinF[i]).toString() + ' &deg;C';
+        }
+    }
+
+    $('#temps').html(temps.join('<br>'));
 }
 
 /**
