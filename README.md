@@ -14,13 +14,14 @@ Click [here](https://seanmhamlet.github.io/local-weather/) to visit the local we
 
 ### Tools and Techniques
 
-Toos Used:
+Tools Used:
 - HTML
 - CSS
 - Bootstrap
 - JavaScript
 - jQuery
-- forcast.io API
-- Google Maps API
+- AJAX
+- darksky API
+- ip API
 
 ![Local Weather Screenshot](/images/local-weather.png "Local Weather")
